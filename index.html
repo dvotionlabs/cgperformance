@@ -114,12 +114,11 @@
   @media (max-width:560px){
     table.rates, table.rates tbody{ display:block; width:100%; }
     table.rates tr{
-      display:flex; justify-content:space-between; align-items:baseline;
-      flex-wrap:wrap; width:100%; padding:14px 0;
+      display:grid; grid-template-columns:1fr auto; align-items:start;
+      column-gap:16px; width:100%; padding:14px 0;
     }
-    table.rates td{ display:block; padding:0; }
-    table.rates td:first-child{ width:auto; flex:1 1 auto; padding-right:16px; }
-    table.rates td.desc{ font-size:13px; margin-top:2px; padding-right:0; }
+    table.rates td{ display:block; padding:0; width:auto; }
+    table.rates td.desc{ font-size:13px; margin-top:3px; padding-right:0; }
     table.rates td.fig{ text-align:right; margin-top:0; }
     table.rates td.fig small{ text-align:right; }
   }
@@ -229,15 +228,15 @@
       <h2>Simple, session-based rates.</h2>
       <table class="rates">
         <tr>
-          <td>Personal Training<div class="desc">In-person or hybrid, one-to-one.</div></td>
+          <td>Personal Training<div class="desc">In-person or hybrid.</div></td>
           <td class="fig">£100–£125<small>per session</small></td>
         </tr>
         <tr>
-          <td>Online Coaching<div class="desc">Fully remote programming and check-ins.</div></td>
+          <td>Online Coaching<div class="desc">Remote programming and check-ins.</div></td>
           <td class="fig">£350<small>per month</small></td>
         </tr>
         <tr>
-          <td>Initial Consultation<div class="desc">Movement assessment and starting point.</div></td>
+          <td>Initial Consultation<div class="desc">Movement assessment.</div></td>
           <td class="fig">£150<small>one-off</small></td>
         </tr>
       </table>
