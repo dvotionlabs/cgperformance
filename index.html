@@ -149,6 +149,28 @@
   dl.creds dt{ font-size:14px; font-weight:500; margin:0 0 2px; }
   dl.creds dd{ margin:0; font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--stone); letter-spacing:0.03em; text-transform:uppercase; }
 
+  /* ENQUIRE FORM */
+  .enquire-form{ max-width:520px; }
+  .field{ margin-bottom:26px; }
+  .field label{
+    display:block; font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.06em;
+    text-transform:uppercase; color:var(--stone); margin:0 0 9px;
+  }
+  .field input, .field select, .field textarea{
+    width:100%; border:none; border-bottom:1px solid var(--line); background:transparent;
+    border-radius:0; font-family:'IBM Plex Sans', sans-serif; font-size:15px; color:var(--ink);
+    padding:8px 0; outline:none;
+  }
+  .field select{ cursor:pointer; }
+  .field select:invalid{ color:var(--stone); }
+  .field textarea{ resize:vertical; min-height:96px; }
+  .field input:focus, .field select:focus, .field textarea:focus{ border-color:var(--ink); }
+  .form-submit{
+    font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--ink); background:none;
+    border:1px solid var(--ink); padding:12px 26px; cursor:pointer; letter-spacing:0.03em;
+  }
+  .form-submit:hover{ background:var(--ink); color:var(--paper); }
+
   /* FOOTER */
   footer{ padding:48px 0 40px; }
   .foot-grid{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:16px; }
@@ -167,6 +189,7 @@
       <li><a href="#pricing">Pricing</a></li>
       <li><a href="#locations">Locations</a></li>
       <li><a href="#about">About</a></li>
+      <li><a href="#enquire">Enquire</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
   </nav>
@@ -265,6 +288,41 @@
           <img src="images/assessment-hip-bw.jpg" alt="Hip mobility assessment session">
         </div>
       </div>
+    </div>
+  </section>
+
+  <section id="enquire">
+    <div class="wrap">
+      <p class="idx">05 — Enquire</p>
+      <h2>Tell me what you're working on.</h2>
+      <form class="enquire-form" action="https://formsubmit.co/chrisgkoufas.performance@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="New enquiry — CG Performance website">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+        <div class="field">
+          <label for="enq-email">Email</label>
+          <input type="email" id="enq-email" name="email" required>
+        </div>
+        <div class="field">
+          <label for="enq-phone">Phone</label>
+          <input type="tel" id="enq-phone" name="phone" required>
+        </div>
+        <div class="field">
+          <label for="enq-service">Service</label>
+          <select id="enq-service" name="service" required>
+            <option value="" disabled selected>Select a service</option>
+            <option>Personal Training</option>
+            <option>Online Coaching</option>
+            <option>Initial Consultation</option>
+            <option>Not sure yet</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="enq-message">Message</label>
+          <textarea id="enq-message" name="message" rows="5" required></textarea>
+        </div>
+        <button class="form-submit" type="submit">Send enquiry →</button>
+      </form>
     </div>
   </section>
 </main>
