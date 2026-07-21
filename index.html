@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CG Performance — Chris Gkoufas</title>
+<link rel="icon" type="image/png" href="images/logo-cgp.png">
+<meta name="description" content="Health and performance coaching with Chris Gkoufas. Personal training and online coaching at UNTIL Marylebone and UNTIL Liverpool Street.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#ffffff;
+    --ink:#111110;
+    --ink-soft:#55534d;
+    --stone:#8f8c84;
+    --line:#e2e0d9;
+    --max:860px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif; font-weight:400;
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:.01ms !important; transition-duration:.01ms !important;}
+  }
+  .wrap{max-width:var(--max); margin:0 auto; padding:0 28px;}
+  img{max-width:100%; display:block;}
+
+  /* NAV */
+  header{ border-bottom:1px solid var(--line); }
+  nav.wrap{ display:flex; align-items:center; justify-content:space-between; height:60px; }
+  .brand{ display:flex; align-items:center; gap:9px; text-decoration:none; color:var(--ink); }
+  .brand img{ height:18px; width:auto; }
+  .brand span{ font-family:'IBM Plex Mono', monospace; font-size:13px; letter-spacing:0.04em; font-weight:500; }
+  .navlinks{ display:flex; gap:28px; list-style:none; margin:0; padding:0; }
+  .navlinks a{
+    color:var(--ink-soft); text-decoration:none; font-size:13px;
+    letter-spacing:0.02em; font-weight:400; border-bottom:1px solid transparent;
+  }
+  .navlinks a:hover{ color:var(--ink); border-color:var(--ink); }
+  .navtoggle{ display:none; }
+  @media (max-width:620px){
+    .navlinks{
+      position:fixed; inset:60px 0 auto 0; background:var(--paper);
+      flex-direction:column; gap:0; border-bottom:1px solid var(--line);
+      max-height:0; overflow:hidden; transition:max-height .25s ease;
+    }
+    .navlinks.open{ max-height:260px; }
+    .navlinks a{ padding:15px 28px; border-bottom:1px solid var(--line); width:100%; }
+    .navtoggle{
+      display:block; background:none; border:none; cursor:pointer;
+      font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink); letter-spacing:0.05em;
+    }
+  }
+
+  /* INDEX LABEL — small recurring annotation, clinical/report feel */
+  .idx{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.06em;
+    color:var(--stone); text-transform:uppercase; margin:0 0 18px;
+  }
+
+  /* HERO */
+  .hero{ padding:80px 0 0; }
+  h1{
+    font-family:'IBM Plex Sans', sans-serif; font-weight:500;
+    font-size:clamp(34px, 5.6vw, 54px); line-height:1.12; letter-spacing:-0.015em;
+    margin:0 0 24px; max-width:14ch;
+  }
+  .hero-sub{
+    font-size:16px; line-height:1.7; color:var(--ink-soft); font-weight:300;
+    max-width:52ch; margin:0 0 36px;
+  }
+  .hero-links{ display:flex; gap:28px; margin-bottom:56px; }
+  .txt-link{
+    font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--ink);
+    text-decoration:none; border-bottom:1px solid var(--ink); padding-bottom:2px;
+  }
+  .txt-link.muted{ color:var(--ink-soft); border-color:var(--line); }
+  .txt-link:hover{ opacity:0.6; }
+  .hero-photo{ width:100%; border-top:1px solid var(--line); }
+  .hero-photo img{ width:100%; height:auto; max-height:480px; object-fit:cover; }
+
+  /* SECTIONS */
+  section{ padding:72px 0; border-top:1px solid var(--line); }
+  h2{
+    font-family:'IBM Plex Sans', sans-serif; font-weight:500;
+    font-size:clamp(24px,3.2vw,32px); letter-spacing:-0.01em; margin:0 0 28px; max-width:16ch;
+  }
+  .measure{ max-width:60ch; }
+  .measure p{ font-size:16px; line-height:1.75; color:var(--ink-soft); font-weight:300; margin:0 0 18px; }
+  .measure p:last-child{ margin-bottom:0; }
+  .note{
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:var(--ink-soft);
+    border-left:2px solid var(--line); padding-left:14px; margin:28px 0 0; max-width:52ch; line-height:1.6;
+  }
+
+  /* PRICING TABLE */
+  table.rates{ width:100%; border-collapse:collapse; }
+  table.rates tr{ border-top:1px solid var(--line); }
+  table.rates tr:last-child{ border-bottom:1px solid var(--line); }
+  table.rates td{ padding:20px 0; vertical-align:top; }
+  table.rates td:first-child{ font-weight:500; font-size:15px; width:44%; }
+  table.rates td.desc{ font-size:14px; color:var(--stone); font-weight:300; padding-right:20px; }
+  table.rates td.fig{
+    font-family:'IBM Plex Mono', monospace; font-size:16px; text-align:right; white-space:nowrap;
+  }
+  table.rates td.fig small{ display:block; font-size:11px; color:var(--stone); font-weight:400; margin-top:3px; }
+  @media (max-width:560px){
+    table.rates, table.rates tbody, table.rates tr, table.rates td{ display:block; width:100%; }
+    table.rates tr{ padding:18px 0; }
+    table.rates td.fig{ text-align:left; margin-top:4px; }
+    table.rates td.fig small{ text-align:left; }
+  }
+
+  /* LOCATIONS */
+  .loc-list{ display:flex; flex-direction:column; }
+  .loc-row{
+    display:grid; grid-template-columns:120px 1fr; gap:24px;
+    padding:24px 0; border-top:1px solid var(--line); align-items:center;
+  }
+  .loc-row:last-child{ border-bottom:1px solid var(--line); }
+  .loc-row img{ width:120px; height:90px; object-fit:cover; }
+  .loc-row h3{ font-family:'IBM Plex Sans', sans-serif; font-weight:500; font-size:16px; margin:0 0 4px; }
+  .loc-row p{ font-size:14px; color:var(--stone); font-weight:300; margin:0; }
+  @media (max-width:520px){
+    .loc-row{ grid-template-columns:80px 1fr; gap:16px; }
+    .loc-row img{ width:80px; height:64px; }
+  }
+
+  /* ABOUT */
+  .about-grid{ display:grid; grid-template-columns:1fr 280px; gap:48px; }
+  @media (max-width:700px){ .about-grid{ grid-template-columns:1fr; gap:32px; } }
+  .about-photo img{ width:100%; height:auto; }
+  dl.creds{ margin:0; }
+  dl.creds div{ padding:14px 0; border-top:1px solid var(--line); }
+  dl.creds div:last-child{ border-bottom:1px solid var(--line); }
+  dl.creds dt{ font-size:14px; font-weight:500; margin:0 0 2px; }
+  dl.creds dd{ margin:0; font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--stone); letter-spacing:0.03em; text-transform:uppercase; }
+
+  /* FOOTER */
+  footer{ padding:48px 0 40px; }
+  .foot-grid{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:16px; }
+  .foot-brand{ font-family:'IBM Plex Mono', monospace; font-size:13px; letter-spacing:0.03em; }
+  .foot-note{ font-size:13px; color:var(--stone); font-weight:300; }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a href="#top" class="brand"><img src="images/logo-cgp.png" alt="CGP logo"><span>CG PERFORMANCE</span></a>
+    <button class="navtoggle" id="navToggle" aria-label="Toggle menu">MENU</button>
+    <ul class="navlinks" id="navLinks">
+      <li><a href="#philosophy">Philosophy</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#locations">Locations</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" id="top" style="border-top:none; padding-bottom:0;">
+    <div class="wrap">
+      <p class="idx">Chris Gkoufas — CG Performance</p>
+      <h1>Health and performance coaching.</h1>
+      <p class="hero-sub">Personal training and online coaching, built around movement strategy — identifying how you move now, and whether that takes you toward health or toward performance.</p>
+      <div class="hero-links">
+        <a href="#pricing" class="txt-link">See pricing →</a>
+        <a href="#philosophy" class="txt-link muted">How I work</a>
+      </div>
+    </div>
+    <div class="hero-photo">
+      <img src="images/coaching-talk-bw.jpg" alt="Chris Gkoufas coaching a client">
+    </div>
+  </section>
+
+  <section id="philosophy">
+    <div class="wrap">
+      <p class="idx">01 — Philosophy</p>
+      <h2>Movement strategy is behind all of it.</h2>
+      <div class="measure">
+        <p>My approach is built on the UHPC model, developed by Bill Hartman, who I've spent the past two years studying directly under. It treats health and performance as one continuum rather than separate goals — the same framework applies whether someone's trying to get out of pain or trying to run faster.</p>
+        <p>I work with each individual differently, because not everyone has the same goal. Every programme starts with identifying your current movement strategy — the pattern your body has learned to rely on. From there, I plan around what you're trying to achieve: building a more efficient movement strategy either for better movement quality and no pain, or for better performance in sport.</p>
+      </div>
+      <p class="note">Trained directly under Bill Hartman — UHPC Performance &amp; Conditioning and UHPC Assessment, 2 years.</p>
+    </div>
+  </section>
+
+  <section id="pricing">
+    <div class="wrap">
+      <p class="idx">02 — Pricing</p>
+      <h2>Simple, session-based rates.</h2>
+      <table class="rates">
+        <tr>
+          <td>Personal Training<div class="desc">In-person or hybrid, one-to-one.</div></td>
+          <td class="fig">£100–£125<small>per session</small></td>
+        </tr>
+        <tr>
+          <td>Online Coaching<div class="desc">Fully remote programming and check-ins.</div></td>
+          <td class="fig">£350<small>per month</small></td>
+        </tr>
+        <tr>
+          <td>Initial Consultation<div class="desc">Movement assessment and starting point.</div></td>
+          <td class="fig">£150<small>one-off</small></td>
+        </tr>
+      </table>
+    </div>
+  </section>
+
+  <section id="locations">
+    <div class="wrap">
+      <p class="idx">03 — Locations</p>
+      <h2>Trained at UNTIL.</h2>
+      <div class="loc-list">
+        <div class="loc-row">
+          <img src="images/until-gym-floor-bw.jpg" alt="UNTIL strength training floor">
+          <div>
+            <h3>UNTIL Marylebone</h3>
+            <p>Strength floor, full free-weight setup.</p>
+          </div>
+        </div>
+        <div class="loc-row">
+          <img src="images/until-treatment-room-bw.jpg" alt="UNTIL assessment room">
+          <div>
+            <h3>UNTIL Liverpool Street</h3>
+            <p>Private room for assessment and consultation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap">
+      <p class="idx">04 — About</p>
+      <h2>Where the knowledge comes from.</h2>
+      <div class="about-grid">
+        <div>
+          <div class="measure">
+            <p>I've worked with professional and recreational athletes, and with professionals from the city looking to move and feel better outside of work. Across all of them, the starting point is the same: identifying movement strategy, then building a more efficient one around what the client is trying to achieve.</p>
+          </div>
+          <dl class="creds">
+            <div><dt>BSc, Sport and Exercise Science</dt><dd>Degree</dd></div>
+            <div><dt>MSc, Sports Marketing</dt><dd>Degree</dd></div>
+            <div><dt>Strength &amp; Conditioning, Level 4</dt><dd>Certification</dd></div>
+            <div><dt>UHPC Performance &amp; Conditioning Course</dt><dd>Bill Hartman</dd></div>
+            <div><dt>UHPC Assessment Course</dt><dd>Bill Hartman</dd></div>
+          </dl>
+        </div>
+        <div class="about-photo">
+          <img src="images/assessment-hip-bw.jpg" alt="Hip mobility assessment session">
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="contact">
+  <div class="wrap foot-grid">
+    <span class="foot-brand">CG PERFORMANCE</span>
+    <span class="foot-note">Chris Gkoufas — health and performance coaching</span>
+    <a class="txt-link" href="mailto:chrisgkoufas.performance@gmail.com">chrisgkoufas.performance@gmail.com</a>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.getElementById('navToggle');
+  const links = document.getElementById('navLinks');
+  toggle.addEventListener('click', () => links.classList.toggle('open'));
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+</script>
+
+</body>
+</html>
