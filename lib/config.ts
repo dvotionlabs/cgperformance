@@ -1,3 +1,0 @@
-export const PAYMENT_FAILURE_GRACE_PERIOD_DAYS = Number(
-  process.env.PAYMENT_FAILURE_GRACE_PERIOD_DAYS ?? 7
-);

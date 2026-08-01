@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /enquiry-success
+Disallow: /payment-submitted
+Disallow: /api/
+
+Sitemap: https://cgperformance.fit/sitemap.xml
