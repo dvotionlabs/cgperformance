@@ -173,6 +173,14 @@ alongside it as `assets/images/logo-cgp.png`. Replace both to change the mark,
 and regenerate the favicons in `assets/icons/` from the same artwork so the
 browser tab matches.
 
+### Photography not currently on the page
+
+`assessment-hip-bw`, `until-gym-floor-bw` and `until-treatment-room-bw` are kept
+in `assets/images/` but are not used on the homepage, which deliberately runs
+with one photograph so the page stays short and loads quickly. The gym floor
+photograph is the background of the social sharing image. Any of them can be
+dropped back into a section if you want more imagery later.
+
 ### The social sharing image
 
 `assets/images/social-share.jpg`, 1200 x 630. Replace the file to change what

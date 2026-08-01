@@ -20,7 +20,7 @@ ticked.
 - [ ] Replace or approve the social sharing image at
       `assets/images/social-share.jpg`
 - [ ] Review the About copy
-- [ ] Review the Approach copy and the five stages
+- [ ] Review the Approach copy
 - [ ] Review every service description and every inclusion list
 - [ ] Review the FAQ answers
 
