@@ -29,11 +29,11 @@ window.CG_CONFIG = {
     legalName: 'CG Performance Limited',
     coach: 'Christoforos Gkoufas',
     site: 'https://cgperformance.fit',
-    // PLACEHOLDER: confirm before launch
     email: 'chrisgkoufas.performance@gmail.com',
     cancellationEmail: 'chrisgkoufas.performance@gmail.com',
-    telephone: '',
-    instagram: '',
+    telephone: '+447341053760',
+    telephoneDisplay: '07341 053760',
+    instagram: 'https://www.instagram.com/chrisgkoufaspt/',
   },
 
   /*

@@ -10,11 +10,11 @@ ticked.
 - [ ] Add final professional portrait, or confirm the current hero photograph is
       the one to keep
 - [ ] Add final logo, or approve the existing CG mark and text wordmark
-- [ ] Confirm the business email address shown in the footer, Privacy Policy and
+- [x] Confirm the business email address shown in the footer, Privacy Policy and
       Terms
-- [ ] Confirm the cancellation email address in the Terms
-- [ ] Add the business telephone number, or remove the line from the footer
-- [ ] Add the Instagram URL, or remove the line from the footer
+- [x] Confirm the cancellation email address in the Terms
+- [x] Add the business telephone number, or remove the line from the footer
+- [x] Add the Instagram URL, or remove the line from the footer
 - [ ] Add the company registration number and registered office address to the
       Privacy Policy and Terms
 - [ ] Replace or approve the social sharing image at

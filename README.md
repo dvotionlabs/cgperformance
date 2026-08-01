@@ -342,9 +342,8 @@ npm run check:placeholders
 
 This lists every remaining `PLACEHOLDER` comment and every "to be confirmed"
 line in the HTML and JavaScript. The list should be empty before launch. The
-items currently outstanding are the telephone number, the Instagram URL, the
-company registration details in the Privacy Policy and Terms, and the optional
-final portrait.
+items currently outstanding are the company registration details in the Privacy
+Policy and Terms, and the optional final portrait.
 
 Work through [LAUNCH_CHECKLIST.md](LAUNCH_CHECKLIST.md) before going live.
 
