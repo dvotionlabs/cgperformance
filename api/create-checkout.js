@@ -1,8 +1,9 @@
 /*
- * CG Performance | Secure recurring Checkout
- * ------------------------------------------
- * Creates a Stripe Checkout Session in subscription mode for the monthly
- * Bacs Direct Debit services.
+ * CG Performance | Secure Checkout
+ * --------------------------------
+ * Creates a Stripe Checkout Session for every purchasable service:
+ *   - monthly services, as Bacs Direct Debit subscriptions
+ *   - session packs and the consultation, as one time payments
  *
  * The browser sends one thing only: a public service ID. Everything that
  * affects money is resolved here:
@@ -12,48 +13,108 @@
  *
  * The function never accepts a price, a Price ID, an amount, a discount or a
  * billing date from the client.
+ *
+ * The terms of each service are shown on the Stripe Checkout page itself,
+ * beside the terms of service acceptance box, so a client reads them before
+ * paying rather than only on the Terms page.
  */
 
 const Stripe = require('stripe');
+
+const MONTHLY_TERMS =
+  'Your session allowance applies to the calendar month. Unused sessions expire at the end of the month and do not roll over. ' +
+  'Billing is on the first of each month and one month of written notice is required to cancel. ' +
+  'Sessions arranged before your first monthly payment are charged separately. ' +
+  'Sessions cancelled with less than 24 hours of notice are charged in full and cannot be rescheduled.';
+
+const ONLINE_TERMS =
+  'Online Coaching runs monthly, billed on the first of each month, and one month of written notice is required to cancel. ' +
+  'If you join before the first, your programme begins on the first unless another arrangement is agreed directly.';
+
+function packTerms(validity) {
+  return (
+    'Sessions are arranged by appointment and are subject to availability. This pack is valid for ' + validity +
+    ' from the date of purchase, and unused sessions expire at the end of that period. ' +
+    'Sessions cancelled with less than 24 hours of notice are charged in full and cannot be rescheduled.'
+  );
+}
 
 /* ---------------------------------------------------------------------------
  * Server side allowlist. A service ID that is not in this table is rejected.
  * ------------------------------------------------------------------------- */
 const SERVICES = {
   'pt-4-monthly': {
+    mode: 'subscription',
     priceEnv: 'STRIPE_PRICE_PT_4_MONTHLY',
     description: 'CG Performance | 4 In Person Sessions Monthly',
     allowPromotionCodes: true,
+    terms: MONTHLY_TERMS,
   },
   'pt-8-monthly': {
+    mode: 'subscription',
     priceEnv: 'STRIPE_PRICE_PT_8_MONTHLY',
     description: 'CG Performance | 8 In Person Sessions Monthly',
     allowPromotionCodes: true,
+    terms: MONTHLY_TERMS,
   },
   'pt-12-monthly': {
+    mode: 'subscription',
     priceEnv: 'STRIPE_PRICE_PT_12_MONTHLY',
     description: 'CG Performance | 12 In Person Sessions Monthly',
     allowPromotionCodes: true,
+    terms: MONTHLY_TERMS,
   },
   'online-coaching-monthly': {
+    mode: 'subscription',
     priceEnv: 'STRIPE_PRICE_ONLINE_MONTHLY',
     description: 'CG Performance | Online Coaching',
     allowPromotionCodes: false,
+    terms: ONLINE_TERMS,
   },
   'virtual-4-monthly': {
+    mode: 'subscription',
     priceEnv: 'STRIPE_PRICE_VIRTUAL_4_MONTHLY',
     description: 'CG Performance | 4 Virtual Coaching Sessions Monthly',
     allowPromotionCodes: false,
+    terms: MONTHLY_TERMS,
   },
   'virtual-8-monthly': {
+    mode: 'subscription',
     priceEnv: 'STRIPE_PRICE_VIRTUAL_8_MONTHLY',
     description: 'CG Performance | 8 Virtual Coaching Sessions Monthly',
     allowPromotionCodes: false,
+    terms: MONTHLY_TERMS,
   },
   'virtual-12-monthly': {
+    mode: 'subscription',
     priceEnv: 'STRIPE_PRICE_VIRTUAL_12_MONTHLY',
     description: 'CG Performance | 12 Virtual Coaching Sessions Monthly',
     allowPromotionCodes: false,
+    terms: MONTHLY_TERMS,
+  },
+  'pt-3-pack': {
+    mode: 'payment',
+    priceEnv: 'STRIPE_PRICE_PT_3_PACK',
+    description: 'CG Performance | 3 Session In Person Pack',
+    allowPromotionCodes: false,
+    terms: packTerms('one month'),
+  },
+  'pt-10-pack': {
+    mode: 'payment',
+    priceEnv: 'STRIPE_PRICE_PT_10_PACK',
+    description: 'CG Performance | 10 Session In Person Pack',
+    allowPromotionCodes: true,
+    terms: packTerms('three months'),
+  },
+  'movement-strategy-analysis': {
+    mode: 'payment',
+    priceEnv: 'STRIPE_PRICE_MOVEMENT_ANALYSIS',
+    description: 'CG Performance | Movement Strategy Analysis Consultation',
+    allowPromotionCodes: false,
+    terms:
+      'A 60 minute movement assessment and coaching consultation, arranged by appointment at UNTIL Liverpool Street or UNTIL Marylebone. ' +
+      'It is not a medical diagnosis, physiotherapy assessment or substitute for medical care. ' +
+      'Appointments cancelled with less than 24 hours of notice are charged in full and cannot be rescheduled.',
   },
 };
 
@@ -196,7 +257,7 @@ async function handler(req, res) {
   const service = typeof serviceId === 'string' ? SERVICES[serviceId] : null;
 
   if (!service) {
-    return res.status(400).json({ message: 'That service is not available for online setup.' });
+    return res.status(400).json({ message: 'That service is not available to buy online.' });
   }
 
   const secretKey = process.env.STRIPE_SECRET_KEY;
@@ -210,16 +271,16 @@ async function handler(req, res) {
       service.priceEnv, 'set:', Boolean(priceId)
     );
     return res.status(503).json({
-      message: 'Online setup for this service is not available yet. Please use the enquiry form and I will arrange it directly.',
+      message: 'Online purchase of this service is not available yet. Please use the enquiry form and I will arrange it directly.',
     });
   }
 
   const stripe = new Stripe(secretKey);
-  const anchorUnix = nextFirstOfMonthUnix(new Date());
+  const isSubscription = service.mode === 'subscription';
+  const anchorUnix = isSubscription ? nextFirstOfMonthUnix(new Date()) : null;
 
   const params = {
-    mode: 'subscription',
-    payment_method_types: ['bacs_debit'],
+    mode: service.mode,
     line_items: [
       {
         price: priceId,
@@ -232,31 +293,47 @@ async function handler(req, res) {
     phone_number_collection: { enabled: true },
     consent_collection: { terms_of_service: 'required' },
     custom_text: {
-      submit: {
-        message:
-          'Your Direct Debit instruction is submitted to CG Performance Limited. Monthly billing begins on the first of the month and one month of written notice is required to cancel.',
-      },
+      terms_of_service_acceptance: { message: service.terms },
     },
     allow_promotion_codes: service.allowPromotionCodes,
-    subscription_data: {
-      description: service.description,
-      proration_behavior: 'none',
-      metadata: { service_id: serviceId },
-    },
     metadata: { service_id: serviceId },
     success_url: siteUrl + '/payment-submitted?session_id={CHECKOUT_SESSION_ID}',
     cancel_url: siteUrl + '/#services',
   };
 
-  /*
-   * Billing date.
-   * On the first of the month the subscription starts straight away, so every
-   * renewal lands on the first. On any other day the first full billing cycle
-   * is moved to the next first of the month with proration switched off, so
-   * nothing is charged before that date.
-   */
-  if (anchorUnix !== null) {
-    params.subscription_data.billing_cycle_anchor_config = { day_of_month: 1 };
+  if (isSubscription) {
+    /* Monthly services are collected by Bacs Direct Debit only. */
+    params.payment_method_types = ['bacs_debit'];
+    params.subscription_data = {
+      description: service.description,
+      proration_behavior: 'none',
+      metadata: { service_id: serviceId },
+    };
+    params.custom_text.submit = {
+      message:
+        'Your Direct Debit instruction is submitted to CG Performance Limited. Monthly billing begins on the first of the month.',
+    };
+
+    /*
+     * Billing date.
+     * On the first of the month the subscription starts straight away, so every
+     * renewal lands on the first. On any other day the first full billing cycle
+     * is moved to the next first of the month with proration switched off, so
+     * nothing is charged before that date.
+     */
+    if (anchorUnix !== null) {
+      params.subscription_data.billing_cycle_anchor_config = { day_of_month: 1 };
+    }
+  } else {
+    /*
+     * One time purchases use whichever payment methods are enabled in the
+     * Stripe Dashboard, so card, Apple Pay and Google Pay all work without
+     * anything extra here.
+     */
+    params.payment_intent_data = { description: service.description };
+    params.custom_text.submit = {
+      message: 'CG Performance will contact you to arrange your sessions.',
+    };
   }
 
   try {

@@ -15,14 +15,14 @@ index.html                              Homepage. Every public section lives her
 privacy.html                            Privacy Policy (draft, needs review)
 terms.html                              Terms of Service (draft, needs review)
 enquiry-success.html                    Shown after an enquiry is sent
-payment-submitted.html                  Shown after Stripe Checkout or a Payment Link
+payment-submitted.html                  Shown after a completed Stripe Checkout
 404.html                                Not found page
 
 styles.css                              All styling
 script.js                               All behaviour
-services.js                             Prices, service data, Payment Link URLs
+services.js                             Prices and service data
 
-api/create-subscription-checkout.js     Creates Stripe Checkout sessions (Direct Debit)
+api/create-checkout.js                  Creates Stripe Checkout sessions
 api/enquiry.js                          Emails the enquiry form to the CG inbox
 
 assets/images/                          Photography, logo, social sharing image
@@ -51,7 +51,7 @@ across as follows:
 | Brief                           | This build                                    |
 | ------------------------------- | --------------------------------------------- |
 | `netlify.toml` and `_redirects` | `vercel.json`                                 |
-| Netlify Function                | `api/create-subscription-checkout.js`         |
+| Netlify Function                | `api/create-checkout.js`                      |
 | Netlify Forms                   | `api/enquiry.js`, which emails through Resend |
 
 Everything else follows the brief as written.
@@ -113,6 +113,12 @@ All public copy is in the HTML files, written in plain sentences. Open
 House style: UK English, no em dashes or en dashes, no sales language, no claims
 that are not confirmed.
 
+The homepage does not restate the terms of each service. Session validity,
+cancellation and notice periods are shown on the Stripe Checkout page, next to
+the box a client ticks before paying, and in full on the Terms page. The wording
+for Checkout lives at the top of `api/create-checkout.js`, so editing it there
+changes what buyers see. If you change a rule, change it in both places.
+
 ---
 
 ## 4. Editing prices and service information
@@ -144,7 +150,7 @@ price cannot quietly change in one place only.
 **To change a price:** edit the pence value in `services.js`, edit the matching
 figure in `index.html`, then load the page and check the console is clean. If
 the price is also live in Stripe, create a new Stripe Price and update the
-environment variable or Payment Link too.
+matching environment variable in Vercel too.
 
 ---
 
@@ -193,10 +199,9 @@ Twitter tags in `index.html`.
 
 Full instructions are in [STRIPE_SETUP.md](STRIPE_SETUP.md). In short:
 
-### Recurring services (Direct Debit)
-
-Create the recurring Prices in Stripe and add the Price IDs as environment
-variables in Vercel:
+Every service on the site, monthly or one time, is bought through the same
+serverless function. There are no Stripe Payment Links to manage. Create the
+Prices in Stripe and add the Price IDs as environment variables in Vercel:
 
 ```
 STRIPE_SECRET_KEY
@@ -207,27 +212,23 @@ STRIPE_PRICE_ONLINE_MONTHLY
 STRIPE_PRICE_VIRTUAL_4_MONTHLY
 STRIPE_PRICE_VIRTUAL_8_MONTHLY
 STRIPE_PRICE_VIRTUAL_12_MONTHLY
+STRIPE_PRICE_PT_3_PACK
+STRIPE_PRICE_PT_10_PACK
+STRIPE_PRICE_MOVEMENT_ANALYSIS
 SITE_URL
 ```
 
 The browser never sees a Price ID. It sends a service ID such as
 `pt-8-monthly`, and the function looks up the matching Price on the server.
 
-### One time services (Payment Links)
+Monthly services are created as Bacs Direct Debit subscriptions. Packs and the
+consultation are created as one time payments using whichever payment methods
+are enabled in your Stripe Dashboard, so turning on Apple Pay or Google Pay
+there needs no change here.
 
-Create the Payment Links in Stripe and paste the URLs into `services.js`:
-
-```js
-paymentLinks: {
-  'pt-3-pack': 'https://buy.stripe.com/...',
-  'pt-10-pack': 'https://buy.stripe.com/...',
-  'movement-strategy-analysis': 'https://buy.stripe.com/...',
-}
-```
-
-While a link is left as an empty string, the Purchase button automatically
-becomes "Enquire to Purchase" and takes the visitor to the enquiry form with
-that service preselected. Nothing appears broken.
+If a Price ID is missing, the button does not break. It reports that the
+service cannot be bought online yet and points the visitor at the enquiry form,
+which sits directly beneath every price list.
 
 ---
 

@@ -30,32 +30,34 @@ function check(name, pass, detail) {
   const year = await page.locator('[data-year]').first().textContent();
   check('footer year is current', year === String(new Date().getFullYear()), year);
 
-  // 3. purchase buttons fall back to enquiry (no payment links configured)
-  const purchaseLabels = await page.locator('[data-purchase]').allTextContents();
+  // 3. every service can be bought directly
+  const buyButtons = await page.locator('[data-checkout]').count();
+  check('every service has a purchase button', buyButtons === 10, String(buyButtons));
+  const labels = await page.locator('[data-checkout]').allTextContents();
   check(
-    'unconfigured purchase buttons become Enquire to Purchase',
-    purchaseLabels.every((t) => t.trim() === 'Enquire to Purchase'),
-    JSON.stringify(purchaseLabels)
+    'no button falls back to an enquiry route',
+    labels.every((t) => /Set Up Direct Debit|Purchase/.test(t.trim())),
+    JSON.stringify(labels)
   );
 
-  // 4. virtual selector starts disabled
-  const vBtn = page.locator('#virtual-checkout');
-  check('virtual button starts disabled', await vBtn.isDisabled());
-  const vTotal0 = await page.locator('#virtual-total').textContent();
-  check('virtual total prompts a selection', /Select an option/.test(vTotal0), vTotal0);
+  // 4. every plan row shows a price and a rate
+  const rows = await page.locator('.plan').count();
+  check('ten price rows are rendered', rows === 10, String(rows));
 
-  // 5. select 8 sessions
-  await page.locator('input[value="virtual-8-monthly"]').check();
-  const vTotal = await page.locator('#virtual-total').textContent();
-  check('virtual total updates for 8 sessions', /8 sessions.*£100.*£800/.test(vTotal), vTotal);
-  check('virtual button enabled after selection', await vBtn.isEnabled());
-  const aria = await vBtn.getAttribute('aria-label');
-  check('virtual button aria-label updated', /8 Virtual Coaching sessions.*£800/.test(aria || ''), aria);
+  // 5. terms are not restated in the visible page copy, only linked.
+  // innerText excludes collapsed <details>, so the FAQ answers are not counted.
+  const bodyText = await page.locator('main').innerText();
+  const termsOnPage = [
+    'do not roll over',
+    'written notice',
+    '24 hours',
+  ].filter((phrase) => bodyText.includes(phrase));
+  check('service terms are not restated in the visible copy', termsOnPage.length === 0, termsOnPage.join(', '));
+  check('the homepage links to the Terms page', await page.locator('a[href="/terms"]').count() > 0);
 
-  // 6. 12 sessions
-  await page.locator('input[value="virtual-12-monthly"]').check();
-  const vTotal12 = await page.locator('#virtual-total').textContent();
-  check('virtual total updates for 12 sessions', /12 sessions.*£1,200/.test(vTotal12), vTotal12);
+  // 6. an enquiry route is still offered per service
+  const enquireLinks = await page.locator('.link-btn[data-enquire]').count();
+  check('each service offers an enquiry route', enquireLinks === 4, String(enquireLinks));
 
   // 7. Enquire button preselects the service
   await page.locator('[data-enquire="pt-8-monthly"]').first().click();
@@ -97,13 +99,13 @@ function check(name, pass, detail) {
   await page.goto(BASE, { waitUntil: 'networkidle' });
   const posted = [];
   page.on('request', (r) => {
-    if (r.url().includes('/api/create-subscription-checkout')) posted.push(r.postData());
+    if (r.url().includes('/api/create-checkout')) posted.push(r.postData());
   });
   await Promise.all([
     page.waitForURL('**/payment-submitted**', { timeout: 5000 }),
-    page.locator('[data-checkout="pt-12-monthly"]').click(),
+    page.locator('[data-checkout="pt-10-pack"]').click(),
   ]);
-  check('checkout posts only a service ID', posted[0] === '{"serviceId":"pt-12-monthly"}', posted[0]);
+  check('checkout posts only a service ID', posted[0] === '{"serviceId":"pt-10-pack"}', posted[0]);
   check('checkout follows the returned URL', page.url().includes('/payment-submitted'), page.url());
 
   // 12. no secrets in anything the browser downloads

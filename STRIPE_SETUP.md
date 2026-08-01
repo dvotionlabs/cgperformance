@@ -20,7 +20,7 @@ nothing done in test mode affects live customers.
 3. [Branding, Privacy and Terms URLs](#3-branding-privacy-and-terms-urls)
 4. [Create the recurring products and prices](#4-create-the-recurring-products-and-prices)
 5. [Create the one time products and prices](#5-create-the-one-time-products-and-prices)
-6. [Create the Payment Links](#6-create-the-payment-links)
+6. [One time services](#6-one-time-services)
 7. [Add the environment variables to Vercel](#7-add-the-environment-variables-to-vercel)
 8. [How the Checkout function works](#8-how-the-checkout-function-works)
 9. [Existing client coupons and promotion codes](#9-existing-client-coupons-and-promotion-codes)
@@ -127,11 +127,11 @@ product ID (`prod_...`).
 
 Same place, but with type **One off**.
 
-| Product name                                           | Price     |
-| ------------------------------------------------------ | --------- |
-| CG Performance \| 3 Session In Person Pack              | £390.00   |
-| CG Performance \| 10 Session In Person Pack             | £1,250.00 |
-| CG Performance \| Movement Strategy Analysis Consultation | £150.00 |
+| Product name                                              | Price     | Environment variable             |
+| --------------------------------------------------------- | --------- | -------------------------------- |
+| CG Performance \| 3 Session In Person Pack                 | £390.00   | `STRIPE_PRICE_PT_3_PACK`         |
+| CG Performance \| 10 Session In Person Pack                | £1,250.00 | `STRIPE_PRICE_PT_10_PACK`        |
+| CG Performance \| Movement Strategy Analysis Consultation  | £150.00   | `STRIPE_PRICE_MOVEMENT_ANALYSIS` |
 
 Suggested descriptions:
 
@@ -141,45 +141,27 @@ Suggested descriptions:
 
 ---
 
-## 6. Create the Payment Links
+## 6. One time services
 
-Go to **Payment links, Create payment link** and create one for each one time
-product.
+There are **no Stripe Payment Links to create**. The session packs and the
+consultation are bought through the same Checkout function as the monthly
+services, so everything on the website behaves the same way and there is only
+one place to configure.
 
-For every link:
+What this means in practice:
 
-- Product: the matching one time product
-- Quantity: fixed at 1, customers may not adjust it
-- Under **Options, After payment**: choose **Redirect to your website** and set
-  the URL to `https://cgperformance.fit/payment-submitted`
-- Under **Options**: turn on collecting the customer's **phone number**
-- Under **Options**: set billing address collection to required, which also
-  collects the customer's name
-- Under **Options**: require acceptance of the Terms of Service if the setting
-  is offered
-
-Promotion codes:
-
-| Payment Link                | Allow promotion codes |
-| --------------------------- | --------------------- |
-| 3 Session Pack              | **No**                |
-| 10 Session Pack             | **Yes**               |
-| Movement Strategy Analysis  | **No**                |
-
-Copy each link URL and paste it into `services.js`:
-
-```js
-paymentLinks: {
-  'pt-3-pack': 'https://buy.stripe.com/...',
-  'pt-10-pack': 'https://buy.stripe.com/...',
-  'movement-strategy-analysis': 'https://buy.stripe.com/...',
-},
-```
-
-Test mode links and live mode links are different URLs. Remember to swap them
-when you go live.
-
----
+- Copy the Price ID of each one time product, exactly as for the monthly ones,
+  and add it to Vercel using the variable names in the table above.
+- Payment methods for one time purchases are whatever you have enabled under
+  **Settings, Payments, Payment methods**. Card is on by default. Turning on
+  Apple Pay and Google Pay there makes them appear at Checkout with no change
+  to the website.
+- Bacs is not used for one time purchases. It takes several working days to
+  clear, which is the wrong fit for a pack somebody wants to book against this
+  week.
+- Promotion codes are enabled for the 10 Session Pack and switched off for the
+  3 Session Pack and the consultation. This is set in the function, not in the
+  Dashboard.
 
 ## 7. Add the environment variables to Vercel
 
@@ -195,6 +177,9 @@ In Vercel, open the project, then **Settings, Environment Variables**. Add:
 | `STRIPE_PRICE_VIRTUAL_4_MONTHLY`   | `price_...`                                |
 | `STRIPE_PRICE_VIRTUAL_8_MONTHLY`   | `price_...`                                |
 | `STRIPE_PRICE_VIRTUAL_12_MONTHLY`  | `price_...`                                |
+| `STRIPE_PRICE_PT_3_PACK`           | `price_...`                                |
+| `STRIPE_PRICE_PT_10_PACK`          | `price_...`                                |
+| `STRIPE_PRICE_MOVEMENT_ANALYSIS`   | `price_...`                                |
 | `SITE_URL`                         | `https://cgperformance.fit`, or the preview URL while testing |
 
 Use the test Price IDs in the Preview and Development environments, and the live
@@ -208,16 +193,21 @@ returns a clear message and the visitor is pointed at the enquiry form.
 
 ## 8. How the Checkout function works
 
-`api/create-subscription-checkout.js` is deliberately narrow.
+`api/create-checkout.js` is deliberately narrow.
 
 - It accepts **POST only** and rejects any request that did not come from the
   CG Performance site.
-- It accepts **one field**, `serviceId`, and only the seven values in its own
+- It accepts **one field**, `serviceId`, and only the ten values in its own
   server side allowlist.
 - It maps that ID to a Price ID held in an environment variable. The browser
   never sees, sends or influences a Price ID, an amount, a discount or a date.
-- It creates a Checkout Session in `subscription` mode, restricted to
-  `bacs_debit`, with one line item at quantity 1 and quantity adjustment off.
+- Monthly services are created in `subscription` mode, restricted to
+  `bacs_debit`. Packs and the consultation are created in `payment` mode using
+  the payment methods enabled on the account. Either way there is one line item
+  at quantity 1 with quantity adjustment off.
+- It passes the terms of that specific service to Stripe, so they appear on the
+  Checkout page next to the terms of service acceptance box. The website itself
+  does not restate them.
 - It collects name and billing address, email and telephone number, and requires
   acceptance of the Terms of Service.
 - It sets promotion codes on or off per service, as in the table below.
@@ -234,6 +224,9 @@ Promotion code entry:
 | `virtual-4-monthly`       | Disabled        |
 | `virtual-8-monthly`       | Disabled        |
 | `virtual-12-monthly`      | Disabled        |
+| `pt-3-pack`               | Disabled        |
+| `pt-10-pack`              | Enabled         |
+| `movement-strategy-analysis` | Disabled     |
 
 ### Billing on the first of the month
 
@@ -397,17 +390,18 @@ For each of the seven recurring services:
       amount. Advance the test clock, or check again after a real cycle, to
       confirm it repeats.
 
-### 10.5 One time Payment Links
+### 10.5 One time purchases
 
-- [ ] Each of the three links opens with the correct product and price.
-- [ ] Name, email and telephone number are collected.
+- [ ] Each of the three one time services opens Checkout with the correct
+      product and price.
+- [ ] Name, email, telephone number and billing address are collected.
+- [ ] The terms for that service appear next to the acceptance box.
 - [ ] Payment redirects to `/payment-submitted`.
 - [ ] The promotion code field appears only on the 10 Session Pack.
 
 ### 10.6 The rest of the site
 
-- [ ] The Virtual Coaching selector will not proceed until an option is chosen,
-      and each of the three options opens the matching Checkout.
+- [ ] Each Virtual Coaching option opens the matching Checkout.
 - [ ] The enquiry form sends and the email arrives.
 - [ ] Every Enquire button jumps to the form with the right service selected.
 - [ ] Every redirect in `vercel.json` resolves.
@@ -461,24 +455,22 @@ Online Coaching has no interim rate. The programme begins on the first.
 
 Only when every test above has passed:
 
-1. Recreate the products, prices, Payment Links and coupons in **live mode**.
-   Test mode objects do not carry across.
+1. Recreate the products, prices and coupons in **live mode**. Test mode
+   objects do not carry across.
 2. Replace `STRIPE_SECRET_KEY` in Vercel Production with the live key
    (`sk_live_...`).
-3. Replace all seven `STRIPE_PRICE_*` variables in Production with the live
+3. Replace all ten `STRIPE_PRICE_*` variables in Production with the live
    Price IDs.
-4. Replace the three Payment Link URLs in `services.js` with the live links, and
-   push that change.
-5. Set `SITE_URL` in Production to `https://cgperformance.fit`.
-6. Set the Privacy and Terms URLs in Stripe back to the live domain.
-7. Redeploy.
-8. Confirm no secret key appears anywhere in the repository:
+4. Set `SITE_URL` in Production to `https://cgperformance.fit`.
+5. Set the Privacy and Terms URLs in Stripe back to the live domain.
+6. Redeploy.
+7. Confirm no secret key appears anywhere in the repository:
 
    ```bash
    git grep -nE "sk_(live|test)_|rk_live_|whsec_" || echo "No Stripe secrets found."
    ```
 
-9. Confirm no promotion code appears in the repository:
+8. Confirm no promotion code appears in the repository:
 
    ```bash
    git grep -niE "promo|coupon" -- services.js script.js index.html
@@ -486,5 +478,5 @@ Only when every test above has passed:
 
    Only comments and structural references should appear, never a code.
 
-10. Make one small real purchase yourself, then refund it, to confirm the live
-    path works end to end.
+9. Make one small real purchase yourself, then refund it, to confirm the live
+   path works end to end.

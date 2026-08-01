@@ -42,7 +42,7 @@
     </a>
 
     <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
-      <span class="nav-toggle-label">Menu</span>
+      <span>Menu</span>
       <span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span></span>
     </button>
 
@@ -134,199 +134,113 @@
     <div class="wrap">
       <p class="eyebrow">Services and pricing</p>
       <h2 id="services-h">Coaching services</h2>
-      <p class="section-intro">In person training and the Movement Strategy Analysis take place at UNTIL Liverpool Street or UNTIL Marylebone. Online Coaching and Virtual Coaching are delivered remotely. All prices are in pounds sterling. In Person Personal Training, Virtual Coaching and the Movement Strategy Analysis are 60 minutes per session.</p>
+      <p class="section-intro">In person training and the Movement Strategy Analysis take place at UNTIL Liverpool Street or UNTIL Marylebone. Online Coaching and Virtual Coaching are delivered remotely. In Person Personal Training, Virtual Coaching and the Movement Strategy Analysis are 60 minutes per session.</p>
 
       <!-- IN PERSON -->
       <div class="service-block" id="in-person-training">
         <h3 class="service-title">In Person Personal Training</h3>
         <p class="service-desc">Individual coaching that begins by understanding your current movement strategy and movement availability. Training can include movement work, strength development and aerobic activity according to your goals and current capacity.</p>
 
-        <h4 class="sub-title" id="monthly-in-person">Monthly Direct Debit</h4>
+        <ul class="plans">
+          <li class="plan">
+            <span class="plan-name">4 sessions per month</span>
+            <span class="plan-rate"><span data-price="pt-4-monthly.perSession">&pound;125</span> per session</span>
+            <span class="plan-price"><span data-price="pt-4-monthly.amount">&pound;500</span> <span class="plan-unit">per month</span></span>
+            <button class="btn btn-solid btn-sm plan-buy" type="button" data-checkout="pt-4-monthly">Set Up Direct Debit</button>
+          </li>
+          <li class="plan">
+            <span class="plan-name">8 sessions per month</span>
+            <span class="plan-rate"><span data-price="pt-8-monthly.perSession">&pound;120</span> per session</span>
+            <span class="plan-price"><span data-price="pt-8-monthly.amount">&pound;960</span> <span class="plan-unit">per month</span></span>
+            <button class="btn btn-solid btn-sm plan-buy" type="button" data-checkout="pt-8-monthly">Set Up Direct Debit</button>
+          </li>
+          <li class="plan">
+            <span class="plan-name">12 sessions per month</span>
+            <span class="plan-rate"><span data-price="pt-12-monthly.perSession">&pound;115</span> per session</span>
+            <span class="plan-price"><span data-price="pt-12-monthly.amount">&pound;1,380</span> <span class="plan-unit">per month</span></span>
+            <button class="btn btn-solid btn-sm plan-buy" type="button" data-checkout="pt-12-monthly">Set Up Direct Debit</button>
+          </li>
+          <li class="plan">
+            <span class="plan-name">3 session pack</span>
+            <span class="plan-rate"><span data-price="pt-3-pack.perSession">&pound;130</span> per session, valid one month</span>
+            <span class="plan-price"><span data-price="pt-3-pack.amount">&pound;390</span> <span class="plan-unit">once</span></span>
+            <button class="btn btn-solid btn-sm plan-buy" type="button" data-checkout="pt-3-pack">Purchase</button>
+          </li>
+          <li class="plan">
+            <span class="plan-name">10 session pack</span>
+            <span class="plan-rate"><span data-price="pt-10-pack.perSession">&pound;125</span> per session, valid three months</span>
+            <span class="plan-price"><span data-price="pt-10-pack.amount">&pound;1,250</span> <span class="plan-unit">once</span></span>
+            <button class="btn btn-solid btn-sm plan-buy" type="button" data-checkout="pt-10-pack">Purchase</button>
+          </li>
+        </ul>
 
-        <div class="cards cards-3">
-          <article class="card">
-            <h5 class="card-title">4 sessions per month</h5>
-            <p class="price"><span class="price-main" data-price="pt-4-monthly.amount">&pound;500</span> <span class="price-unit">per month</span></p>
-            <p class="price-sub"><span data-price="pt-4-monthly.perSession">&pound;125</span> per session</p>
-            <div class="card-actions">
-              <button class="btn btn-solid btn-sm" type="button" data-checkout="pt-4-monthly">Set Up Direct Debit</button>
-              <button class="btn btn-quiet btn-sm" type="button" data-enquire="pt-4-monthly">Enquire</button>
-            </div>
-          </article>
-
-          <article class="card card-emphasis">
-            <h5 class="card-title">8 sessions per month</h5>
-            <p class="price"><span class="price-main" data-price="pt-8-monthly.amount">&pound;960</span> <span class="price-unit">per month</span></p>
-            <p class="price-sub"><span data-price="pt-8-monthly.perSession">&pound;120</span> per session</p>
-            <div class="card-actions">
-              <button class="btn btn-solid btn-sm" type="button" data-checkout="pt-8-monthly">Set Up Direct Debit</button>
-              <button class="btn btn-quiet btn-sm" type="button" data-enquire="pt-8-monthly">Enquire</button>
-            </div>
-          </article>
-
-          <article class="card">
-            <h5 class="card-title">12 sessions per month</h5>
-            <p class="price"><span class="price-main" data-price="pt-12-monthly.amount">&pound;1,380</span> <span class="price-unit">per month</span></p>
-            <p class="price-sub"><span data-price="pt-12-monthly.perSession">&pound;115</span> per session</p>
-            <div class="card-actions">
-              <button class="btn btn-solid btn-sm" type="button" data-checkout="pt-12-monthly">Set Up Direct Debit</button>
-              <button class="btn btn-quiet btn-sm" type="button" data-enquire="pt-12-monthly">Enquire</button>
-            </div>
-          </article>
-        </div>
-
-        <div class="notes">
-          <p>Recurring monthly Bacs Direct Debit, billed on the first of each month, with one month's written notice to cancel. <strong>Unused monthly sessions expire at the end of the calendar month and do not roll over.</strong></p>
-          <p>Sessions arranged before your first monthly payment are charged separately at the per session rate of your selected plan. Sessions are arranged by appointment following purchase and are subject to availability at your selected location. Purchase does not guarantee a particular recurring appointment time.</p>
-        </div>
-
-        <h4 class="sub-title" id="session-packs">Session Packs</h4>
-
-        <div class="cards cards-2">
-          <article class="card">
-            <h5 class="card-title">3 session pack</h5>
-            <p class="price"><span class="price-main" data-price="pt-3-pack.amount">&pound;390</span> <span class="price-unit">total</span></p>
-            <p class="price-sub"><span data-price="pt-3-pack.perSession">&pound;130</span> per session. Valid for one month from purchase.</p>
-            <div class="card-actions">
-              <button class="btn btn-solid btn-sm" type="button" data-purchase="pt-3-pack">Purchase</button>
-              <button class="btn btn-quiet btn-sm" type="button" data-enquire="pt-3-pack">Enquire</button>
-            </div>
-          </article>
-
-          <article class="card">
-            <h5 class="card-title">10 session pack</h5>
-            <p class="price"><span class="price-main" data-price="pt-10-pack.amount">&pound;1,250</span> <span class="price-unit">total</span></p>
-            <p class="price-sub"><span data-price="pt-10-pack.perSession">&pound;125</span> per session. Valid for three months from purchase.</p>
-            <div class="card-actions">
-              <button class="btn btn-solid btn-sm" type="button" data-purchase="pt-10-pack">Purchase</button>
-              <button class="btn btn-quiet btn-sm" type="button" data-enquire="pt-10-pack">Enquire</button>
-            </div>
-          </article>
-        </div>
-
-        <div class="notes">
-          <p>A fixed number of in person sessions with no recurring payment. Unused pack sessions expire at the end of the stated validity period. Sessions are arranged by appointment and are subject to availability.</p>
-        </div>
+        <p class="service-foot">Monthly plans are paid by Direct Debit and billed on the first of each month. <button class="link-btn" type="button" data-enquire="pt-8-monthly">Enquire about in person training</button></p>
       </div>
 
       <!-- MOVEMENT STRATEGY ANALYSIS -->
       <div class="service-block" id="movement-strategy-analysis">
         <h3 class="service-title">Movement Strategy Analysis Consultation</h3>
-        <p class="service-desc">Used to identify the movement strategy you are currently using, the movement availability you have and how this relates to the activities or goals you want to pursue. The consultation covers your goals and training history, observation of relevant movement tasks, movement assessment, a discussion of the findings and practical recommendations for training.</p>
+        <p class="service-desc">Used to identify the movement strategy you are currently using, the movement availability you have and how this relates to the activities or goals you want to pursue. The consultation covers your goals and training history, observation of relevant movement tasks, movement assessment, a discussion of the findings and practical recommendations for training. It is a coaching and movement assessment service, not a medical diagnosis or physiotherapy assessment.</p>
 
-        <div class="card card-row">
-          <div class="card-row-price">
-            <p class="price"><span class="price-main" data-price="movement-strategy-analysis.amount">&pound;150</span> <span class="price-unit">one time payment</span></p>
-            <p class="price-sub">60 minutes at UNTIL Liverpool Street or UNTIL Marylebone.</p>
-          </div>
-          <div class="card-actions">
-            <button class="btn btn-solid btn-sm" type="button" data-purchase="movement-strategy-analysis">Purchase</button>
-            <button class="btn btn-quiet btn-sm" type="button" data-enquire="movement-strategy-analysis">Enquire</button>
-          </div>
-        </div>
+        <ul class="plans">
+          <li class="plan">
+            <span class="plan-name">Movement Strategy Analysis</span>
+            <span class="plan-rate">60 minutes, in person</span>
+            <span class="plan-price"><span data-price="movement-strategy-analysis.amount">&pound;150</span> <span class="plan-unit">once</span></span>
+            <button class="btn btn-solid btn-sm plan-buy" type="button" data-checkout="movement-strategy-analysis">Purchase</button>
+          </li>
+        </ul>
 
-        <div class="notes">
-          <p>The Movement Strategy Analysis is a coaching and movement assessment service. It is not a medical diagnosis, physiotherapy assessment or substitute for medical care.</p>
-        </div>
+        <p class="service-foot"><button class="link-btn" type="button" data-enquire="movement-strategy-analysis">Enquire about a consultation</button></p>
       </div>
 
       <!-- ONLINE COACHING -->
       <div class="service-block" id="online-coaching">
         <h3 class="service-title">Online Coaching</h3>
-        <p class="service-desc">An individual training programme based on your movement capacity, goals, training availability, weekly schedule and the equipment available to you. It normally covers both health and performance unless your goal is particularly specific towards one end.</p>
+        <p class="service-desc">An individual training programme based on your movement capacity, goals, training availability, weekly schedule and the equipment available to you. It can include movement work, strength work and aerobic activity, with general nutrition guidance where relevant, one monthly call to review progress and plan the month ahead, and programme changes based on how you respond.</p>
 
-        <div class="card card-row">
-          <div class="card-row-price">
-            <p class="price"><span class="price-main" data-price="online-coaching-monthly.amount">&pound;350</span> <span class="price-unit">per month</span></p>
-            <p class="price-sub">Paid monthly by Direct Debit. One month's written notice to cancel.</p>
-          </div>
-          <div class="card-actions">
-            <button class="btn btn-solid btn-sm" type="button" data-checkout="online-coaching-monthly">Set Up Direct Debit</button>
-            <button class="btn btn-quiet btn-sm" type="button" data-enquire="online-coaching-monthly">Enquire</button>
-          </div>
-        </div>
-
-        <ul class="ticks ticks-2 ticks-tight">
-          <li>An individual programme built around your movement capacity and goals</li>
-          <li>Programming that fits your weekly schedule, training availability and equipment</li>
-          <li>Movement work, strength work and aerobic activity where appropriate</li>
-          <li>General nutrition guidance where relevant to your goal</li>
-          <li>One monthly call to review progress and plan the following month</li>
-          <li>Programme changes based on your progress and feedback</li>
+        <ul class="plans">
+          <li class="plan">
+            <span class="plan-name">Online Coaching</span>
+            <span class="plan-rate">Programme and one monthly call</span>
+            <span class="plan-price"><span data-price="online-coaching-monthly.amount">&pound;350</span> <span class="plan-unit">per month</span></span>
+            <button class="btn btn-solid btn-sm plan-buy" type="button" data-checkout="online-coaching-monthly">Set Up Direct Debit</button>
+          </li>
         </ul>
 
-        <div class="notes">
-          <p>The monthly service begins on the first of the month. If you join before the first, your programme begins on the first unless another arrangement is agreed directly.</p>
-        </div>
+        <p class="service-foot">Paid by Direct Debit and billed on the first of each month. <button class="link-btn" type="button" data-enquire="online-coaching-monthly">Enquire about Online Coaching</button></p>
       </div>
 
       <!-- VIRTUAL COACHING -->
       <div class="service-block" id="virtual-coaching">
         <h3 class="service-title">Virtual Coaching</h3>
-        <p class="service-desc">Live individual coaching over video call. Sessions can include movement work based on your specific movement strategy, strength work, movement assessment, reassessment after a training input has been applied and exercise changes in real time, within what can be observed safely and clearly through video.</p>
+        <p class="service-desc">Live individual coaching over video call, charged at <span data-price="virtual-4-monthly.perSession">&pound;100</span> per session. Sessions can include movement work based on your specific movement strategy, strength work, movement assessment and exercise changes in real time, within what can be observed safely and clearly through video. You need a stable connection, a camera you can position, enough space to move and access to basic equipment.</p>
 
-        <div class="card card-wide">
-          <div class="selector" id="virtual-selector">
-            <fieldset aria-describedby="virtual-help">
-              <legend class="card-lead">Select the number of sessions per month</legend>
-              <div class="segmented">
-                <label class="segment">
-                  <input type="radio" name="virtual-plan" value="virtual-4-monthly">
-                  <span class="segment-body">
-                    <span class="segment-title">4 sessions</span>
-                    <span class="segment-price" data-price="virtual-4-monthly.amount">&pound;400</span>
-                    <span class="segment-unit">per month</span>
-                  </span>
-                </label>
-                <label class="segment">
-                  <input type="radio" name="virtual-plan" value="virtual-8-monthly">
-                  <span class="segment-body">
-                    <span class="segment-title">8 sessions</span>
-                    <span class="segment-price" data-price="virtual-8-monthly.amount">&pound;800</span>
-                    <span class="segment-unit">per month</span>
-                  </span>
-                </label>
-                <label class="segment">
-                  <input type="radio" name="virtual-plan" value="virtual-12-monthly">
-                  <span class="segment-body">
-                    <span class="segment-title">12 sessions</span>
-                    <span class="segment-price" data-price="virtual-12-monthly.amount">&pound;1,200</span>
-                    <span class="segment-unit">per month</span>
-                  </span>
-                </label>
-              </div>
-              <p class="selector-help" id="virtual-help">Every option is charged at <span data-price="virtual-4-monthly.perSession">&pound;100</span> per session, billed on the first of each month, with one month's written notice to cancel.</p>
-            </fieldset>
-          </div>
+        <ul class="plans">
+          <li class="plan">
+            <span class="plan-name">4 sessions per month</span>
+            <span class="plan-rate"><span data-price="virtual-4-monthly.perSession">&pound;100</span> per session</span>
+            <span class="plan-price"><span data-price="virtual-4-monthly.amount">&pound;400</span> <span class="plan-unit">per month</span></span>
+            <button class="btn btn-solid btn-sm plan-buy" type="button" data-checkout="virtual-4-monthly">Set Up Direct Debit</button>
+          </li>
+          <li class="plan">
+            <span class="plan-name">8 sessions per month</span>
+            <span class="plan-rate"><span data-price="virtual-8-monthly.perSession">&pound;100</span> per session</span>
+            <span class="plan-price"><span data-price="virtual-8-monthly.amount">&pound;800</span> <span class="plan-unit">per month</span></span>
+            <button class="btn btn-solid btn-sm plan-buy" type="button" data-checkout="virtual-8-monthly">Set Up Direct Debit</button>
+          </li>
+          <li class="plan">
+            <span class="plan-name">12 sessions per month</span>
+            <span class="plan-rate"><span data-price="virtual-12-monthly.perSession">&pound;100</span> per session</span>
+            <span class="plan-price"><span data-price="virtual-12-monthly.amount">&pound;1,200</span> <span class="plan-unit">per month</span></span>
+            <button class="btn btn-solid btn-sm plan-buy" type="button" data-checkout="virtual-12-monthly">Set Up Direct Debit</button>
+          </li>
+        </ul>
 
-          <p class="selector-total" id="virtual-total" aria-live="polite">Select an option to see the monthly total.</p>
-
-          <div class="card-actions">
-            <button class="btn btn-solid btn-sm" type="button" data-checkout="virtual-selected" id="virtual-checkout" disabled>Set Up Direct Debit</button>
-            <button class="btn btn-quiet btn-sm" type="button" data-enquire="virtual-4-monthly">Enquire</button>
-          </div>
-        </div>
-
-        <div class="notes">
-          <p>You need a stable internet connection, a phone, tablet or computer with a stable way to position the camera, enough space to complete the movements and access to basic training equipment. If you train in a commercial gym, check that video calls are allowed. Not every movement assessment can be completed virtually.</p>
-          <p>Unused sessions expire at the end of the calendar month. Sessions arranged before your first monthly payment are charged separately at the per session rate of your selected plan. If you need an arrangement other than the three options above, please use the enquiry form.</p>
-        </div>
+        <p class="service-foot">Paid by Direct Debit and billed on the first of each month. <button class="link-btn" type="button" data-enquire="virtual-4-monthly">Enquire about Virtual Coaching</button></p>
       </div>
 
-      <!-- CANCELLATION POLICY -->
-      <div class="service-block" id="policies">
-        <h3 class="service-title">Cancellation and rescheduling</h3>
-        <div class="two-col">
-          <div class="prose">
-            <h4 class="sub-title-plain">Individual sessions</h4>
-            <p>A booked session can be cancelled or rescheduled when at least 24 hours' notice is provided, with the replacement subject to availability and within the same calendar month or the remaining pack validity. <strong>Sessions cancelled with less than 24 hours' notice are charged in full and cannot be rescheduled.</strong> The same applies to a missed session. If I cancel a session, you are not charged and it is rearranged.</p>
-          </div>
-          <div class="prose">
-            <h4 class="sub-title-plain">Monthly services</h4>
-            <p>Monthly services continue on a recurring basis and a minimum of one month's written notice is required to cancel, sent to the CG Performance business email address. Payments falling due during the notice period remain payable, and cancelling the Direct Debit instruction through your bank does not itself cancel the coaching agreement.</p>
-          </div>
-        </div>
-      </div>
+      <p class="services-terms">The full terms for each service, including session validity, cancellation and notice periods, are shown at checkout before you pay and on the <a href="/terms">Terms of Service</a> page.</p>
     </div>
   </section>
 

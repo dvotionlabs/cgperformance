@@ -3,7 +3,7 @@
  * Run with: npm test
  * No dependencies, no network, no Stripe or Resend account required.
  */
-const checkout = require('../api/create-subscription-checkout.js');
+const checkout = require('../api/create-checkout.js');
 const enquiry = require('../api/enquiry.js');
 const { nextFirstOfMonthUnix, SERVICES } = checkout.internals;
 
@@ -56,13 +56,21 @@ check('anchor is always in the future',
 
 /* --- allowlist ---------------------------------------------------------- */
 const ids = Object.keys(SERVICES);
-check('seven recurring services are allowed', ids.length === 7, ids.join(','));
-check('promotion codes only on the three in person monthly plans',
+check('all ten services are purchasable', ids.length === 10, ids.join(','));
+check('seven are monthly subscriptions',
+  ids.filter((id) => SERVICES[id].mode === 'subscription').length === 7);
+check('three are one time payments',
+  ids.filter((id) => SERVICES[id].mode === 'payment').sort().join(',') ===
+    'movement-strategy-analysis,pt-10-pack,pt-3-pack',
+  ids.filter((id) => SERVICES[id].mode === 'payment').join(','));
+check('promotion codes only on the three in person monthly plans and the 10 pack',
   ids.filter((id) => SERVICES[id].allowPromotionCodes).sort().join(',') ===
-    'pt-12-monthly,pt-4-monthly,pt-8-monthly',
+    'pt-10-pack,pt-12-monthly,pt-4-monthly,pt-8-monthly',
   ids.filter((id) => SERVICES[id].allowPromotionCodes).join(','));
-check('no session pack or consultation can reach the subscription function',
-  !ids.some((id) => /pack|movement/.test(id)));
+check('every service states its terms for the Checkout page',
+  ids.every((id) => typeof SERVICES[id].terms === 'string' && SERVICES[id].terms.length > 40));
+check('every service resolves its price from an environment variable',
+  ids.every((id) => /^STRIPE_PRICE_/.test(SERVICES[id].priceEnv)));
 
 /* --- request handling --------------------------------------------------- */
 function mockRes() {
@@ -88,7 +96,7 @@ const goodHeaders = { origin: 'https://cgperformance.fit', host: 'cgperformance.
   check('cross origin POST is rejected with 403', res.statusCode === 403, String(res.statusCode));
 
   res = mockRes();
-  await checkout({ method: 'POST', headers: goodHeaders, body: { serviceId: 'pt-3-pack' } }, res);
+  await checkout({ method: 'POST', headers: goodHeaders, body: { serviceId: 'made-up-service' } }, res);
   check('an ID outside the allowlist is rejected with 400', res.statusCode === 400, String(res.statusCode));
 
   res = mockRes();

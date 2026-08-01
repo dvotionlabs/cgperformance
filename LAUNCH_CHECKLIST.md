@@ -26,6 +26,8 @@ ticked.
 
 ## 2. Legal
 
+- [ ] Check the service terms shown on the Stripe Checkout page, set at the top
+      of `api/create-checkout.js`
 - [ ] Review the Privacy Policy in full
 - [ ] Review the Terms of Service in full
 - [ ] Complete the legal review of the liability, consumer rights, refunds and
@@ -39,14 +41,12 @@ ticked.
 - [ ] Create the three one time products
 - [ ] Create every recurring Price at the correct monthly amount
 - [ ] Create every one time Price at the correct amount
-- [ ] Create the three one time Payment Links
 - [ ] Enable Bacs Direct Debit on the account
 - [ ] Set the Privacy and Terms URLs in Stripe public details
 - [ ] Upload Stripe branding
-- [ ] Add all seven `STRIPE_PRICE_*` variables in Vercel
+- [ ] Add all ten `STRIPE_PRICE_*` variables in Vercel
 - [ ] Add `SITE_URL` in Vercel
 - [ ] Add `STRIPE_SECRET_KEY` in Vercel, securely
-- [ ] Paste the three Payment Link URLs into `services.js`
 
 ## 4. Existing client discounts
 
@@ -70,11 +70,10 @@ ticked.
 - [ ] Confirm no automatic proration is charged before the first full cycle
 - [ ] Confirm the period before the first is not shown as a free trial
 - [ ] Test a Bacs Direct Debit submission end to end in test mode
-- [ ] Confirm `/payment-submitted` appears after Checkout and after a Payment
-      Link
-- [ ] Test every standard Checkout, all seven recurring services
-- [ ] Test every one time Payment Link, all three
-- [ ] Test the Virtual Coaching selector on all three options
+- [ ] Confirm `/payment-submitted` appears after every Checkout
+- [ ] Test every standard Checkout, all seven monthly services
+- [ ] Test all three one time purchases
+- [ ] Test all three Virtual Coaching options
 - [ ] Confirm the interim session process and the rates to quote
 
 ## 6. Forms and notifications

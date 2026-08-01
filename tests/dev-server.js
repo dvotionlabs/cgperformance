@@ -35,7 +35,7 @@ http
       req.on('end', () => {
         console.log('API', pathname, body);
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        if (pathname === '/api/create-subscription-checkout') {
+        if (pathname === '/api/create-checkout') {
           res.end(JSON.stringify({ url: '/payment-submitted?stub=1' }));
         } else {
           res.end(JSON.stringify({ ok: true }));

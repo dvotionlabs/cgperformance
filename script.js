@@ -9,7 +9,7 @@
 (function () {
   'use strict';
 
-  var CONFIG = window.CG_CONFIG || { services: {}, paymentLinks: {}, endpoints: {} };
+  var CONFIG = window.CG_CONFIG || { services: {}, endpoints: {} };
   var SERVICES = CONFIG.services || {};
 
   var gbp = new Intl.NumberFormat('en-GB', {
@@ -130,89 +130,47 @@
   });
 
   /* ------------------------------------------------------------------
-   * Virtual Coaching selector
+   * Purchase buttons
+   * Every service, monthly or one time, goes through the same serverless
+   * function. The browser sends nothing but a service ID. Prices, Stripe
+   * Price IDs, promotion code eligibility and the billing date are resolved
+   * on the server, and the terms are shown on the Stripe Checkout page.
    * ------------------------------------------------------------------ */
-  var virtualButton = $('#virtual-checkout');
-  var virtualTotal = $('#virtual-total');
-  var virtualRadios = $$('input[name="virtual-plan"]');
-  var selectedVirtual = null;
-
-  function updateVirtual() {
-    var checked = virtualRadios.filter(function (radio) { return radio.checked; })[0];
-
-    if (!checked) {
-      selectedVirtual = null;
-      if (virtualTotal) virtualTotal.textContent = 'Select an option to see the monthly total.';
-      if (virtualButton) {
-        virtualButton.disabled = true;
-        virtualButton.textContent = 'Set Up Direct Debit';
-        virtualButton.setAttribute('aria-label', 'Select the number of Virtual Coaching sessions per month before setting up a Direct Debit');
-      }
-      return;
-    }
-
-    var id = checked.value;
-    var service = SERVICES[id];
-    if (!service) return;
-
-    selectedVirtual = id;
-    if (virtualTotal) {
-      virtualTotal.textContent = service.sessions + ' sessions per month at ' +
-        money(service.perSession) + ' per session. Monthly total ' + money(service.amount) + '.';
-    }
-    if (virtualButton) {
-      virtualButton.disabled = false;
-      virtualButton.textContent = 'Set Up Direct Debit';
-      virtualButton.setAttribute('aria-label',
-        'Set up a Direct Debit for ' + service.sessions + ' Virtual Coaching sessions per month at ' +
-        money(service.amount) + ' per month');
-    }
-  }
-
-  virtualRadios.forEach(function (radio) {
-    radio.addEventListener('change', updateVirtual);
-  });
-  updateVirtual();
-
-  /* ------------------------------------------------------------------
-   * Recurring Direct Debit checkout
-   * The browser sends nothing but a service ID. Prices, Stripe Price IDs and
-   * the billing date are resolved on the server.
-   * ------------------------------------------------------------------ */
-  function setBusy(button, busy, label) {
+  function setBusy(button, busy) {
     if (busy) {
       button.dataset.originalLabel = button.dataset.originalLabel || button.textContent;
-      button.textContent = label || 'Opening secure checkout';
+      button.textContent = 'Opening secure checkout';
       button.classList.add('is-busy');
       button.disabled = true;
     } else {
-      button.textContent = button.dataset.originalLabel || 'Set Up Direct Debit';
+      button.textContent = button.dataset.originalLabel || 'Purchase';
       button.classList.remove('is-busy');
       button.disabled = false;
     }
   }
 
-  function showButtonError(button, message) {
-    var existing = button.parentNode.querySelector('.field-error');
+  function showPlanError(button, message) {
+    var row = button.closest('.plan') || button.parentNode;
+    var existing = row.querySelector('.plan-error');
     if (existing) existing.remove();
-    var note = document.createElement('span');
-    note.className = 'field-error';
+
+    var note = document.createElement('p');
+    note.className = 'plan-error';
     note.setAttribute('role', 'alert');
     note.textContent = message;
-    button.parentNode.appendChild(note);
+    row.appendChild(note);
   }
 
   $$('[data-checkout]').forEach(function (button) {
     button.addEventListener('click', function () {
       var id = button.getAttribute('data-checkout');
-      if (id === 'virtual-selected') id = selectedVirtual;
 
-      if (!id || !SERVICES[id] || SERVICES[id].type !== 'subscription') {
-        showButtonError(button, 'Please select an option before continuing.');
+      if (!id || !SERVICES[id]) {
+        showPlanError(button, 'That option is not available. Please use the enquiry form.');
         return;
       }
 
-      var stale = button.parentNode.querySelector('.field-error');
+      var stale = (button.closest('.plan') || button.parentNode).querySelector('.plan-error');
       if (stale) stale.remove();
 
       setBusy(button, true);
@@ -233,38 +191,14 @@
             return;
           }
           setBusy(button, false);
-          showButtonError(button, (result.data && result.data.message) ||
+          showPlanError(button, (result.data && result.data.message) ||
             'Checkout is not available at the moment. Please use the enquiry form and I will arrange it directly.');
         })
         .catch(function () {
           setBusy(button, false);
-          showButtonError(button,
+          showPlanError(button,
             'Checkout could not be opened. Please check your connection or use the enquiry form.');
         });
-    });
-  });
-
-  /* ------------------------------------------------------------------
-   * One time purchases through Stripe Payment Links
-   * If a link has not been configured the button becomes an enquiry route
-   * rather than a broken purchase button.
-   * ------------------------------------------------------------------ */
-  $$('[data-purchase]').forEach(function (button) {
-    var id = button.getAttribute('data-purchase');
-    var link = (CONFIG.paymentLinks || {})[id];
-
-    if (!link) {
-      button.textContent = 'Enquire to Purchase';
-      button.classList.remove('btn-solid');
-      button.classList.add('btn-outline');
-      button.addEventListener('click', function () { goToEnquiry(id); });
-      var sibling = button.parentNode.querySelector('[data-enquire="' + id + '"]');
-      if (sibling) sibling.remove();
-      return;
-    }
-
-    button.addEventListener('click', function () {
-      window.location.assign(link);
     });
   });
 

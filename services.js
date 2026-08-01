@@ -11,16 +11,13 @@
  *
  * SECURITY
  *  - Never place a Stripe secret key in this file.
+ *  - Never place a Stripe Price ID in this file.
  *  - Never place a promotion code or coupon ID in this file.
- *  - Stripe Price IDs for recurring services live only in server environment
- *    variables and are resolved inside api/create-subscription-checkout.js.
- *    The browser only ever sends a service ID from the list below.
  *
- * ONE TIME PURCHASES
- *  - Paste the Stripe Payment Link URL against the matching service ID in
- *    paymentLinks below. While a link is an empty string the purchase button
- *    is automatically replaced with "Enquire to Purchase" and points at the
- *    enquiry form with the correct service preselected.
+ * Every service, monthly or one time, is bought through the same serverless
+ * function at api/create-checkout.js. The browser only ever sends a service ID
+ * from the list below. Stripe Price IDs live in server environment variables,
+ * and the terms of each service are shown on the Stripe Checkout page.
  */
 
 window.CG_CONFIG = {
@@ -37,24 +34,10 @@ window.CG_CONFIG = {
   },
 
   /*
-   * Stripe Payment Links for one time purchases.
-   * Create these in the Stripe Dashboard (see STRIPE_SETUP.md) and paste the
-   * https://buy.stripe.com/... URL here.
-   */
-  paymentLinks: {
-    // STRIPE_LINK_PT_3_PACK
-    'pt-3-pack': '',
-    // STRIPE_LINK_PT_10_PACK
-    'pt-10-pack': '',
-    // STRIPE_LINK_MOVEMENT_ANALYSIS
-    'movement-strategy-analysis': '',
-  },
-
-  /*
    * Service catalogue.
    * amount and perSession are in pence.
-   * type "subscription" routes through the serverless Checkout function.
-   * type "one-time" routes through a Stripe Payment Link.
+   * type "subscription" is a monthly Bacs Direct Debit, type "one-time" is a
+   * single payment. Both open Stripe hosted Checkout through the same function.
    * enquiryValue matches the value of an option in the enquiry form select.
    */
   services: {
@@ -148,11 +131,8 @@ window.CG_CONFIG = {
     },
   },
 
-  /* The only Virtual Coaching quantities that may be purchased. */
-  virtualOptions: ['virtual-4-monthly', 'virtual-8-monthly', 'virtual-12-monthly'],
-
   endpoints: {
-    checkout: '/api/create-subscription-checkout',
+    checkout: '/api/create-checkout',
     enquiry: '/api/enquiry',
   },
 };
