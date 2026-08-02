@@ -50,19 +50,20 @@ ticked.
 
 ## 4. Existing client discounts
 
-- [ ] Create the DD4 coupon, £100 off, forever, restricted to the DD4 product
-- [ ] Create the DD8 coupon, £200 off, forever, restricted to the DD8 product
-- [ ] Create the DD12 coupon, £300 off, forever, restricted to the DD12 product
-- [ ] Create the 10 Session Pack coupon, £250 off, once, restricted to that pack
-- [ ] Create an individual promotion code for each eligible client, limited to
+- [x] Create the DD4 coupon, £100 off, forever, restricted to the DD4 product
+- [x] Create the DD8 coupon, £200 off, forever, restricted to the DD8 product
+- [x] Create the DD12 coupon, £300 off, forever, restricted to the DD12 product
+- [x] Create the 10 Session Pack coupon, £250 off, once, restricted to that pack
+- [x] Create an individual promotion code for each eligible client, limited to
       one redemption
 - [ ] Test that each discount produces the correct final price: £400, £760,
       £1,080 and £1,000
 - [ ] Test that discounts cannot be stacked
 - [ ] Test that a code is refused on any product it was not issued for
 - [ ] Test that a recurring discount still appears on the next invoice
-- [ ] Keep the private record of which code went to which client, outside this
-      repository
+- [ ] Keep the private record of which code went to which client, and the
+      matching promotion code IDs, outside this repository. Nothing about a
+      promotion code belongs in git.
 
 ## 5. Billing behaviour
 
