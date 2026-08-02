@@ -264,14 +264,28 @@ async function handler(req, res) {
   const priceId = process.env[service.priceEnv];
   const siteUrl = (process.env.SITE_URL || 'https://cgperformance.fit').replace(/\/$/, '');
 
-  if (!secretKey || !priceId) {
+  /*
+   * Two different setup faults, told apart deliberately. A missing secret key
+   * breaks every service at once, a missing Price ID breaks only this one, and
+   * they are fixed in different places. Neither message reveals a value.
+   */
+  if (!secretKey) {
     console.error(
-      '[checkout] Missing configuration.',
-      'STRIPE_SECRET_KEY set:', Boolean(secretKey),
-      service.priceEnv, 'set:', Boolean(priceId)
+      '[checkout] STRIPE_SECRET_KEY is not set in this environment.',
+      'Add it in the Vercel dashboard and redeploy. Requested service:', serviceId
     );
     return res.status(503).json({
-      message: 'Online purchase of this service is not available yet. Please use the enquiry form and I will arrange it directly.',
+      message: 'Online payment is not connected yet. Please use the enquiry form and I will arrange it directly.',
+    });
+  }
+
+  if (!priceId) {
+    console.error(
+      '[checkout]', service.priceEnv, 'is not set in this environment.',
+      'The Stripe key is present, so only this service is affected.'
+    );
+    return res.status(503).json({
+      message: 'This option cannot be bought online yet. Please use the enquiry form and I will arrange it directly.',
     });
   }
 
