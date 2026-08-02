@@ -1,0 +1,11 @@
+# Files that must not be uploaded to the deployment.
+#
+# A static Vercel deployment serves everything in the project, so anything left
+# here would be downloadable from the live site. STRIPE_SETUP.md in particular
+# contains the internal existing client pricing table, which must never appear
+# publicly.
+
+*.md
+tests/
+.env.example
+node_modules

@@ -1,0 +1,56 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "buildCommand": null,
+  "outputDirectory": null,
+  "installCommand": null,
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/about", "destination": "/#about", "permanent": true },
+    { "source": "/services", "destination": "/#services", "permanent": true },
+    { "source": "/pricing", "destination": "/#services", "permanent": true },
+    { "source": "/prices", "destination": "/#services", "permanent": true },
+    { "source": "/contact", "destination": "/#enquire", "permanent": true },
+    { "source": "/enquiry", "destination": "/#enquire", "permanent": true },
+    { "source": "/locations", "destination": "/#locations", "permanent": true },
+    { "source": "/location", "destination": "/#locations", "permanent": true },
+    { "source": "/personal-training", "destination": "/#in-person-training", "permanent": true },
+    { "source": "/personal-trainer", "destination": "/#in-person-training", "permanent": true },
+    { "source": "/online-coaching", "destination": "/#online-coaching", "permanent": true },
+    { "source": "/virtual-coaching", "destination": "/#virtual-coaching", "permanent": true },
+    { "source": "/movement-strategy-analysis", "destination": "/#movement-strategy-analysis", "permanent": true },
+    { "source": "/assessment", "destination": "/#movement-strategy-analysis", "permanent": true },
+    { "source": "/faq", "destination": "/#faqs", "permanent": true },
+    { "source": "/faqs", "destination": "/#faqs", "permanent": true },
+    { "source": "/book", "destination": "/#services", "permanent": true },
+    { "source": "/booking", "destination": "/#services", "permanent": true },
+    { "source": "/privacy-policy", "destination": "/privacy", "permanent": true },
+    { "source": "/terms-of-service", "destination": "/terms", "permanent": true },
+    { "source": "/terms-and-conditions", "destination": "/terms", "permanent": true }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), interest-cohort=()" },
+        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/(styles.css|script.js|services.js)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    }
+  ]
+}
