@@ -101,8 +101,20 @@ const goodHeaders = { origin: 'https://cgperformance.fit', host: 'cgperformance.
 
   res = mockRes();
   await checkout({ method: 'POST', headers: goodHeaders, body: { serviceId: 'pt-4-monthly', priceId: 'price_hacked', amount: 1 } }, res);
-  check('missing Stripe configuration returns 503, not a broken checkout',
+  check('a missing Stripe key returns 503, not a broken checkout',
     res.statusCode === 503, String(res.statusCode) + ' ' + JSON.stringify(res.body));
+  check('a missing Stripe key says payment is not connected',
+    /not connected yet/.test(res.body.message), res.body.message);
+
+  process.env.STRIPE_SECRET_KEY = 'sk_test_placeholder_for_this_test';
+  res = mockRes();
+  await checkout({ method: 'POST', headers: goodHeaders, body: { serviceId: 'pt-4-monthly' } }, res);
+  check('a missing Price ID is reported differently from a missing key',
+    res.statusCode === 503 && /cannot be bought online yet/.test(res.body.message), res.body.message);
+  delete process.env.STRIPE_SECRET_KEY;
+
+  check('neither setup message leaks a variable name or value',
+    !/STRIPE_|price_|sk_/.test(res.body.message), res.body.message);
 
   /* enquiry */
   process.env.RESEND_API_KEY = 'test-key';
