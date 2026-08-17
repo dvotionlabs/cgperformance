@@ -3,5 +3,6 @@ Allow: /
 Disallow: /enquiry-success
 Disallow: /payment-submitted
 Disallow: /api/
+Disallow: /dvotion
 
 Sitemap: https://cgperformance.fit/sitemap.xml

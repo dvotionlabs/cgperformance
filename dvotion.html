@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1-to-1 Personal Training at your home gym | Dvotion x CG Performance</title>
+<meta name="description" content="One to one personal training in your own home gym in St Albans. 45 minute sessions, £80.">
+
+<!--
+  UNLISTED PAGE.
+
+  This page is handed out by a partner and is not part of the public website.
+  It is kept off the site on purpose:
+    - noindex, nofollow below keeps it out of search results
+    - robots.txt disallows /dvotion
+    - it is not in sitemap.xml
+    - nothing on the website links to it
+
+  Unlisted is not private. Anyone holding the link can open it, and the robots
+  rules are a request that only well behaved crawlers honour. Do not put
+  anything confidential here.
+-->
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+
+<style>
+  /*
+   * Standalone styling. This page does not share the main site stylesheet,
+   * because it is a single card rather than a page of the website, and it needs
+   * to keep working unchanged if the site design moves on.
+   *
+   * Built mobile first: nearly everyone arrives here by scanning a code or
+   * tapping a link on a phone. Type is large and plain for a 50+ reader.
+   */
+  :root {
+    --ground: #050505;      /* Dvotion runs near black, not pure black */
+    --card: #0d0d0d;
+    --ink: #ffffff;
+    --ink-soft: #b9b6b1;
+    --ink-faint: #8a8781;
+    --line: #262626;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 18px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .card {
+    max-width: 620px;
+    margin: 0 auto;
+    background: var(--card);
+    min-height: 100vh;
+  }
+  @media (min-width: 660px) {
+    body { padding: 32px 16px; }
+    .card { min-height: 0; border: 1px solid var(--line); }
+  }
+
+  .inner { padding: 26px 26px 34px; display: flex; flex-direction: column; gap: 22px; }
+
+  /* ---------- co-branded lockup ---------- */
+
+  .lockup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 20px 26px;
+    border-bottom: 1px solid var(--line);
+    flex-wrap: wrap;
+  }
+  .partner {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .cross { color: var(--ink-faint); font-size: 1rem; }
+  .lockup img { width: 74px; height: 29px; display: block; }
+
+  /* ---------- photograph ---------- */
+
+  .shot { margin: 0; }
+  .shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    object-position: 50% 32%;
+    background: var(--line);
+    filter: brightness(0.86) contrast(1.06);   /* settles the bright room onto the dark page */
+  }
+
+  /* ---------- words ---------- */
+
+  .eyebrow {
+    margin: 0 0 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  h1 {
+    margin: 0;
+    font-size: 2.15rem;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+    text-wrap: balance;
+  }
+  .lead { margin: 0; font-size: 1.2rem; color: var(--ink-soft); }
+  .place { margin: 0; font-size: 1rem; color: var(--ink-faint); }
+
+  .price {
+    display: flex;
+    align-items: stretch;
+    align-self: flex-start;
+    transform: skewX(-11deg);
+  }
+  .price > * { padding: 14px 24px; }
+  .price-fee {
+    background: var(--ink);
+    color: #000;
+    font-size: 1.9rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    display: flex;
+    align-items: center;
+  }
+  .price-meta { border: 1px solid var(--ink); border-left: 0; display: flex; align-items: center; }
+  .price-meta span { color: var(--ink); }
+  .price span { transform: skewX(11deg); display: block; }
+  .price-meta span { font-size: 1.1rem; font-weight: 600; }
+
+  .what { list-style: none; margin: 0; padding: 0; display: grid; gap: 13px; }
+  .what li {
+    font-size: 1.1rem;
+    color: var(--ink-soft);
+    padding-left: 30px;
+    position: relative;
+  }
+  .what li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 18px;
+    height: 3px;
+    background: var(--ink);
+  }
+  .what strong { color: var(--ink); font-weight: 600; }
+
+  /* ---------- the actions ---------- */
+
+  .actions { display: grid; gap: 10px; margin-top: 2px; }
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 60px;
+    padding: 14px 20px;
+    border-radius: 4px;
+    font-size: 1.22rem;
+    font-weight: 700;
+    text-decoration: none;
+    border: 2px solid var(--ink);
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .btn { letter-spacing: 0.06em; text-transform: uppercase; }
+  .btn-call { background: var(--ink); color: #000; border-color: var(--ink); }
+  .btn-call:hover { background: #e8e6e2; border-color: #e8e6e2; }
+  .btn-mail {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--line);
+    font-size: 0.92rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    word-break: break-word;
+  }
+  .btn-mail:hover { border-color: var(--ink); }
+  .btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+  a { color: var(--ink); }
+
+  .signoff {
+    border-top: 1px solid var(--line);
+    padding-top: 18px;
+    display: grid;
+    gap: 4px;
+  }
+  .signoff .name { font-size: 1.08rem; font-weight: 700; margin: 0; }
+  .signoff p { margin: 0; font-size: 0.97rem; color: var(--ink-soft); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+
+<body>
+<main class="card">
+
+  <div class="lockup">
+    <span class="partner">Dvotion</span>
+    <span class="cross" aria-hidden="true">&times;</span>
+    <img src="/assets/images/logo-cgp-mark-light.png" width="74" height="29" alt="CG Performance">
+  </div>
+
+  <figure class="shot">
+    <picture>
+      <source srcset="/assets/images/assessment-hip-bw.webp" type="image/webp">
+      <img src="/assets/images/assessment-hip-bw.jpg" width="1400" height="933"
+           alt="Chris Gkoufas checking a client's hip and leg movement" fetchpriority="high">
+    </picture>
+  </figure>
+
+  <div class="inner">
+
+    <div>
+      <p class="eyebrow">Personal Training &middot; St Albans</p>
+      <h1>1-to-1 Personal Training at your home gym.</h1>
+    </div>
+
+    <p class="lead">Get stronger and more agile, while preserving or improving movement capacity.</p>
+
+    <p class="place">I come to you, and we train with the equipment you already have.</p>
+
+    <div class="price" role="img" aria-label="Eighty pounds a session, forty five minutes">
+      <div class="price-fee"><span>&pound;80</span></div>
+      <div class="price-meta"><span>a session, 45 minutes</span></div>
+    </div>
+
+    <ul class="what">
+      <li>You get stronger as we try to maintain and increase movement capacity.</li>
+      <li>Every session is built upon you, your goals, movement capabilities and the equipment you have available.</li>
+    </ul>
+
+    <div class="actions">
+      <a class="btn btn-call" href="tel:+447341053760">Call&nbsp;or&nbsp;text&nbsp;07341&nbsp;053760</a>
+      <a class="btn btn-mail" href="mailto:chrisgkoufas.performance@gmail.com">chrisgkoufas.performance@gmail.com</a>
+    </div>
+
+    <div class="signoff">
+      <p class="name">Chris Gkoufas</p>
+      <p>BSc and MSc in Sport and Exercise Science.</p>
+    </div>
+
+  </div>
+</main>
+</body>
+</html>
